@@ -5,8 +5,10 @@ An implementation of real-time stock data served over [Connect-RPC](https://conn
 
 ## Config Specification
 
+See `config/LoadConfig` for more information. See `config.yaml` for an example configuration.
+
 | Key | Datatype | Default | Meaning |
-| --- | -------- | ------- |
+| --- | -------- | ------- | ------- |
 | LogLevel | String Enum ("none", "error", "warn", "info", "debug") | "Info" | The level at which logs are recorded. None disables logging. |
 | LogFile | String | "" | The filepath to write logs to. If left unset or empty, logs are sent to `stdout`. The file is truncated before logging begins. If the file cannot be opened for writing, the program panics. |
 
