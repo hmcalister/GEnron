@@ -5,6 +5,7 @@ import (
 	"log/slog"
 
 	"github.com/hmcalister/genron/config"
+	"github.com/hmcalister/genron/ticker"
 )
 
 func main() {
@@ -17,4 +18,7 @@ func main() {
 		defer logFilePointer.Close()
 	}
 	slog.Debug("logger configured")
+
+	tickers := ticker.ParseTickers()
+	slog.Debug("parsed tickers", "tickers", tickers)
 }
