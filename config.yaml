@@ -1,6 +1,6 @@
 # LogFile: "logging.log"
-LogLevel: debug
-UpdatePeriod: 1.0
+LogLevel: info
+UpdatePeriod: 1_000_000_000
 Tickers:
   Ticker01:
     Type: "UniformRandom"
