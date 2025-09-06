@@ -11,6 +11,7 @@ See `config/LoadConfig` for more information. See `config.yaml` for an example c
 | --- | -------- | ------- | ------- |
 | LogLevel | String Enum ("none", "error", "warn", "info", "debug") | "Info" | The level at which logs are recorded. None disables logging. |
 | LogFile | String | "" | The filepath to write logs to. If left unset or empty, logs are sent to `stdout`. The file is truncated before logging begins. If the file cannot be opened for writing, the program panics. |
+| UpdatePeriod | float64 | 1.0 | The amount of time (in seconds) to between updates of the tickers. Must be greater than 0. If the update period is too small, the program may not be able to achieve the required period. |
 
 See `config/LoadConfig` for more information.
 
