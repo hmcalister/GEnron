@@ -14,7 +14,7 @@ type Ticker interface {
 	// Get the current value of a ticker.
 	//
 	// Note that no ticker value may be below zero, as a rule of business logic.
-	Value() float64
+	GetValue() float64
 
 	// Update the value of a ticker.
 	//
