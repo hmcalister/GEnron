@@ -62,7 +62,6 @@ func NewTicker(name string, tickerConfig *viper.Viper) (Ticker, error) {
 		} else {
 			randomSeed = time.Now().UnixNano()
 		}
-		slog.Info("random seed", "randomSeed", randomSeed)
 		t.randGen = rand.New(rand.NewSource(randomSeed))
 		t.name = name
 		return t, nil
