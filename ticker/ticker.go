@@ -22,3 +22,18 @@ type Ticker interface {
 	// that is, clamp the updated value to be zero or larger.
 	Update()
 }
+
+// Factory pattern to initialize the new ticker.
+// Returns:
+// - (Ticker, nil) if all checks pass and the ticker is initialized
+// - (nil, ErrorUnknownTickerType) if the ticker type in tickerConfig is unknown
+// - (nil, ErrorInvalidTicker) if the ticker is initialized with invalid parameters (e.g. a negative initial value)
+func NewTicker(name string, tickerConfig *viper.Viper) (Ticker, error) {
+	tickerType := tickerConfig.GetString("Type")
+
+	switch tickerType {
+	default:
+		return nil, ErrorUnknownTickerType
+	}
+}
+
