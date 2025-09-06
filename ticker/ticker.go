@@ -37,3 +37,32 @@ func NewTicker(name string, tickerConfig *viper.Viper) (Ticker, error) {
 	}
 }
 
+func ParseTickers() []Ticker {
+	allTickers := make([]Ticker, 0)
+
+	// viper.GetStringMap("Tickers") gives a map of all tickers specified under
+	// the `tickers` key in the config file. Loop over these and call viper.Sub
+	// to get the config of each ticker.
+	for tickerName := range viper.GetStringMap("Tickers") {
+		tickerConfig := viper.Sub("Tickers." + tickerName)
+
+		// Initialize each ticker based on the Type. If the Type is unknown
+		// (default case) then panic.
+		t, err := NewTicker(tickerName, tickerConfig)
+		if err != nil {
+			slog.Error("error when parsing ticker",
+				"err", err,
+				slog.Group(
+					"ticker",
+					"name", tickerName,
+					"config", tickerConfig.AllSettings(),
+				),
+			)
+			continue
+		}
+
+		allTickers = append(allTickers, t)
+	}
+
+	return allTickers
+}
