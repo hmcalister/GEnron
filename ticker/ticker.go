@@ -7,6 +7,10 @@ type Ticker interface {
 	// Return the name of the ticker.
 	String() string
 
+	// Validate the ticker. Ensures the ticker is a meaningful representation in its current state.
+	// Returns nil if the ticker is valid, and an ErrorInvalidTicker otherwise.
+	Validate() error
+
 	// Get the current value of a ticker.
 	//
 	// Note that no ticker value may be below zero, as a rule of business logic.
