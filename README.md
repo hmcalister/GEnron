@@ -11,7 +11,7 @@ See `config/LoadConfig` for more information. See `config.yaml` for an example c
 | --- | -------- | ------- | ------- |
 | LogLevel | String Enum ("none", "error", "warn", "info", "debug") | "Info" | The level at which logs are recorded. None disables logging. |
 | LogFile | String | "" | The filepath to write logs to. If left unset or empty, logs are sent to `stdout`. The file is truncated before logging begins. If the file cannot be opened for writing, the program panics. |
-| UpdatePeriod | float64 | 1.0 | The amount of time (in seconds) to between updates of the tickers. Must be greater than 0. If the update period is too small, the program may not be able to achieve the required period. |
+| UpdatePeriod | int64 | 1_000_000 | The amount of time (in nanoseconds) to between updates of the tickers. Must be greater than 0. If the update period is too small, the program may not be able to achieve the required period. |
 | Tickers | Dictionary {TickerName: Ticker} | Empty | The tickers to create and manage. Ticker names are used to request data from the server, and tickers have unique specifications based on the ticker type. See below for a list of ticker types and their specifications. All tickers have a `Type` field that identifies the ticker type. All tickers also have a `Value` field that specifies the initial value, and must be non-negative. The valid ticker types are listed below. |
 
 Ticker Types:
