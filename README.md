@@ -14,7 +14,22 @@ See `config/LoadConfig` for more information. See `config.yaml` for an example c
 | UpdatePeriod | float64 | 1.0 | The amount of time (in seconds) to between updates of the tickers. Must be greater than 0. If the update period is too small, the program may not be able to achieve the required period. |
 | Tickers | Dictionary {TickerName: Ticker} | Empty | The tickers to create and manage. Ticker names are used to request data from the server, and tickers have unique specifications based on the ticker type. See below for a list of ticker types and their specifications. All tickers have a `Type` field that identifies the ticker type. All tickers also have a `Value` field that specifies the initial value, and must be non-negative. The valid ticker types are listed below. |
 
-See `config/LoadConfig` for more information.
+Ticker Types:
+- "UniformRandom"
+
+### Uniform Random Ticker
+
+`Type: "UniformRandom"`
+
+Update the ticker value with a uniformly chosen random number at every step. This is a very simple, but very unrealistic model.
+
+| Key | Datatype | Default | Meaning |
+| --- | -------- | ------- | ------- |
+| Type | String | "UniformRandom" | The ticker type. Must be explicitly specific and exactly the default string to be processed as this type. |
+| Value | float64 | 0.0 | The initial value for the ticker. Must be non-negative. |
+| RandomRange | float64 | 0.0 | The upper and lower bound on the random number. Must be non-negative. |
+| RandomSeed | int64 | None | The random seed to use for the generator. If left unset, the current unix timestamp is used instead. |
+
 
 ## Plans
 
