@@ -21,4 +21,6 @@ func main() {
 
 	tickers := ticker.ParseTickers()
 	slog.Debug("parsed tickers", "tickers", tickers)
+
+	updatePeriod := time.Duration(viper.GetInt64("UpdatePeriod")) * time.Nanosecond
 }
