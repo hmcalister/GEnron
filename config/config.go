@@ -32,6 +32,11 @@ func LoadConfig(configFilePath string) {
 	}
 
 	// Now config is loaded, all keys should be available through viper.Get
+	// Validate any remaining keys
+	if viper.GetInt64("UpdatePeriod") < 0 {
+		slog.Error("update period is negative", "UpdatePeriod", viper.GetInt64("UpdatePeriod"))
+		panic("update period is negative")
+	}
 }
 
 // Configure the slog logger using config values in viper.
