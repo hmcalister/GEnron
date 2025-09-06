@@ -3,7 +3,7 @@
 
 An implementation of real-time stock data served over [Connect-RPC](https://connectrpc.com/). 
 
-### Config Specification
+## Config Specification
 
 | Key | Datatype | Default | Meaning |
 | --- | -------- | ------- |
@@ -12,7 +12,7 @@ An implementation of real-time stock data served over [Connect-RPC](https://conn
 
 See `config/LoadConfig` for more information.
 
-### Plans
+## Plans
 
 - Several tickers, each modelled with a different synthetic approach.
     - Naive Monte Carlo
@@ -25,7 +25,7 @@ See `config/LoadConfig` for more information.
     - Postgresql with extensions
 - Benchmarking of update methods for good real-time applications.
 
-### Technologies
+## Technologies
 
 - [Slog](https://pkg.go.dev/log/slog): For structured logging.
 - [Viper](https://github.com/spf13/viper): For configuration setting.
