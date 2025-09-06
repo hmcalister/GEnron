@@ -13,6 +13,7 @@ func LoadConfig(configFilePath string) {
 
 	viper.SetDefault("LogLevel", "info")
 	viper.SetDefault("LogFile", "")
+	viper.SetDefault("UpdatePeriod", 1_000_000)
 
 	// Read explicitly from the config file give.
 	// This may ignore other config paths (e.g. environment variables), worth testing.
