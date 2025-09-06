@@ -4,6 +4,9 @@ package ticker
 // All tickers must implement the below methods, but may use vastly different implementations.
 // This allows for, say, different simulation methods.
 type Ticker interface {
+	// Return the name of the ticker.
+	String() string
+
 	// Get the current value of a ticker.
 	//
 	// Note that no ticker value may be below zero, as a rule of business logic.
