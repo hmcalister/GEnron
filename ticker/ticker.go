@@ -94,7 +94,13 @@ func ParseTickers() []Ticker {
 			)
 			continue
 		}
-
+		slog.Debug("parsed new ticker",
+			slog.Group(
+				"ticker",
+				"name", tickerName,
+				"config", tickerConfig.AllSettings(),
+			),
+		)
 		allTickers = append(allTickers, t)
 	}
 
