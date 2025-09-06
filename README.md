@@ -24,3 +24,8 @@ See `config/LoadConfig` for more information.
     - SQLite
     - Postgresql with extensions
 - Benchmarking of update methods for good real-time applications.
+
+### Technologies
+
+- [Slog](https://pkg.go.dev/log/slog): For structured logging.
+- [Viper](https://github.com/spf13/viper): For configuration setting.
