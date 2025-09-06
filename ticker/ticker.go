@@ -1,5 +1,20 @@
 package ticker
 
+import (
+	"errors"
+	"log/slog"
+	"math/rand"
+	"time"
+
+	"github.com/spf13/viper"
+)
+
+var (
+	ErrorUnknownTickerType    = errors.New("ticker type is not known")
+	ErrorGenericInvalidTicker = errors.New("ticker is invalid for an unspecified reason")
+	ErrorNegativeValueTicker  = errors.New("ticker has a negative value")
+)
+
 // The default ticker interface.
 // All tickers must implement the below methods, but may use vastly different implementations.
 // This allows for, say, different simulation methods.
@@ -32,6 +47,25 @@ func NewTicker(name string, tickerConfig *viper.Viper) (Ticker, error) {
 	tickerType := tickerConfig.GetString("Type")
 
 	switch tickerType {
+	case "UniformRandom":
+		var t *UniformRandomTicker
+		if err := tickerConfig.Unmarshal(&t); err != nil {
+			return nil, err
+		}
+		if err := t.Validate(); err != nil {
+			return nil, err
+		}
+
+		var randomSeed int64
+		if tickerConfig.IsSet("RandomSeed") {
+			randomSeed = tickerConfig.GetInt64("RandomSeed")
+		} else {
+			randomSeed = time.Now().UnixNano()
+		}
+		slog.Info("random seed", "randomSeed", randomSeed)
+		t.randGen = rand.New(rand.NewSource(randomSeed))
+		t.name = name
+		return t, nil
 	default:
 		return nil, ErrorUnknownTickerType
 	}
