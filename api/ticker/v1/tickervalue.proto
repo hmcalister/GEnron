@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package api.ticker.v1;
+
+option go_package = "github.com/hmcalister/genron/gen/api/ticker/v1;tickerv1";
+
+message GetTickerValueRequest {
+  string ticker_name = 1;
+}
+
+message GetTickerValueResponse {
+    string ticker_name = 1;
+    double ticker_value = 2;
+    int64 last_updated_timestamp = 3;
+}
+
+service TickerValueService {
+  rpc GetTickerValue(GetTickerValueRequest) returns (GetTickerValueResponse) {}
+}
