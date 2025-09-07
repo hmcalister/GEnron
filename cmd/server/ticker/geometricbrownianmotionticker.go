@@ -42,8 +42,9 @@ func (t *GeometricBrownianMotionTicker) Update() {
 	//
 	// We will discretize this to assume dt=1, and have the user set drift and volatility accordingly
 
-	exponent := t.drift - 0.5*math.Pow(t.volatility, 2) + t.volatility*t.randGen.NormFloat64()
-	t.value += math.Exp(exponent)
+	dt := 1.0
+	exponent := (t.drift-0.5*math.Pow(t.volatility, 2))*dt + t.volatility*math.Sqrt(dt)*t.randGen.NormFloat64()
+	t.value *= math.Exp(exponent)
 	if t.value < 0 {
 		t.value = 0
 	}
