@@ -67,7 +67,7 @@ type Ticker interface {
 //   - (nil, error) if the ticker is initialized with invalid parameters (e.g. a negative initial value)
 //     The specifics of the error are determined by the initialization method of the selected ticker
 func NewTickerFromConfig(name string, tickerConfig *viper.Viper) (Ticker, error) {
-	tickerType := tickerConfig.GetString("Type")
+	tickerType := tickerConfig.GetString("type")
 
 	var t Ticker
 	switch tickerType {
@@ -93,8 +93,8 @@ func ParseTickers() map[string]Ticker {
 	// viper.GetStringMap("Tickers") gives a map of all tickers specified under
 	// the `tickers` key in the config file. Loop over these and call viper.Sub
 	// to get the config of each ticker.
-	for tickerName := range viper.GetStringMap("Tickers") {
-		tickerConfig := viper.Sub("Tickers." + tickerName)
+	for tickerName := range viper.GetStringMap("tickers") {
+		tickerConfig := viper.Sub("tickers." + tickerName)
 		tickerConfig.Set("name", tickerName) // Add the ticker name to the config as a way to easily pass this along to initializations
 
 		t, err := NewTickerFromConfig(tickerName, tickerConfig)

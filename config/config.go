@@ -11,9 +11,9 @@ import (
 func LoadConfig(configFilePath string) {
 	slog.Debug("loading config")
 
-	viper.SetDefault("LogLevel", "info")
-	viper.SetDefault("LogFile", "")
-	viper.SetDefault("UpdatePeriod", 1_000_000)
+	viper.SetDefault("loglevel", "info")
+	viper.SetDefault("logfile", "")
+	viper.SetDefault("updateperiod", 1_000_000)
 
 	// Read explicitly from the config file give.
 	// This may ignore other config paths (e.g. environment variables), worth testing.
@@ -33,8 +33,8 @@ func LoadConfig(configFilePath string) {
 
 	// Now config is loaded, all keys should be available through viper.Get
 	// Validate any remaining keys
-	if viper.GetInt64("UpdatePeriod") < 0 {
-		slog.Error("update period is negative", "UpdatePeriod", viper.GetInt64("UpdatePeriod"))
+	if viper.GetInt64("updateperiod") < 0 {
+		slog.Error("update period is negative", "updateperiod", viper.GetInt64("updateperiod"))
 		panic("update period is negative")
 	}
 }
@@ -52,7 +52,7 @@ func LoadConfig(configFilePath string) {
 //
 // ```
 func ConfigureLogger() *os.File {
-	logLevel := viper.GetString("LogLevel")
+	logLevel := viper.GetString("loglevel")
 	slogHandlerOptions := slog.HandlerOptions{
 		AddSource: true,
 	}
@@ -73,13 +73,13 @@ func ConfigureLogger() *os.File {
 	case "debug":
 		slogHandlerOptions.Level = slog.LevelDebug
 	default:
-		slog.Error("error when decoding unexpected log level in ConfigureLogger", "LogLevel", logLevel)
+		slog.Error("error when decoding unexpected log level in ConfigureLogger", "loglevel", logLevel)
 		panic("unexpected log level encountered in config")
 	}
 
 	// --------------------------------------------------------------------------------
 
-	logFile := viper.GetString("LogFile")
+	logFile := viper.GetString("logfile")
 	var logFilePointer *os.File
 	var slogHandler slog.Handler
 	if logFile == "" {
@@ -88,7 +88,7 @@ func ConfigureLogger() *os.File {
 	} else {
 		logFilePointer, err := os.OpenFile(logFile, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 		if err != nil {
-			slog.Error("error while creating log file", "LogFile", logFile, "err", err)
+			slog.Error("error while creating log file", "logfile", logFile, "err", err)
 			panic(err)
 		}
 		slogHandler = slog.NewJSONHandler(logFilePointer, &slogHandlerOptions)

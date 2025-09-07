@@ -1,9 +1,9 @@
-# LogFile: "logging.log"
-LogLevel: info
-UpdatePeriod: 1_000_000_000
-Tickers:
-  Ticker01:
-    Type: "UniformRandom"
-    Value: 1.0
-    RandomRange: 1.0
+logfile: "logging.log"
+loglevel: debug
+updateperiod: 1_000_000_000
+tickers:
+  ticker01:
+    type: "UniformRandom"
+    value: 1.0
+    randomrange: 1.0
   

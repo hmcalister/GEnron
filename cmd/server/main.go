@@ -27,7 +27,7 @@ func main() {
 
 	// --------------------------------------------------------------------------------
 
-	updatePeriod := time.Duration(viper.GetInt64("UpdatePeriod")) * time.Nanosecond
+	updatePeriod := time.Duration(viper.GetInt64("updateperiod")) * time.Nanosecond
 	var tickerWaitGroup sync.WaitGroup
 	for _, t := range tickers {
 		tickerWaitGroup.Go(func() {
