@@ -65,7 +65,7 @@ func (serv *TickerInfoServer) GetTickerValue(
 	}
 
 	// TODO: Rate limiting, exhausting, etc...
-	tickerName, newValue, lastUpdatedTimestamp := requestedTicker.GetInfo()
+	tickerName, newValue, lastUpdatedTimestamp, _ := requestedTicker.GetInfo()
 
 	res := connect.NewResponse(&tickerv1.GetTickerValueResponse{
 		TickerName:           tickerName,
