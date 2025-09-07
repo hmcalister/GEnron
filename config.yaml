@@ -1,15 +1,16 @@
 # logfile: "logging.log"
 loglevel: info
-updateperiod: 1_000_000_000
 port: 8080
 tickers:
   ticker01:
     type: "UniformRandom"
     value: 100.0
+    updateperiod: 1_000
     randomrange: 1.0
   ticker02:
     type: "GeometricBrownianMotion"
     value: 100.0
+    updateperiod: 1_000_000
     drift: 0.0
     volatility: 1.0
   
