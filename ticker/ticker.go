@@ -149,11 +149,12 @@ func StartTicker(t Ticker, updatePeriod time.Duration) {
 		updateStartTime := time.Now()
 		t.Update()
 		updateDuration := time.Since(updateStartTime)
+		newValue := t.GetValue()
 
 		slog.Debug("ticker updated",
 			slog.Group("ticker",
 				"name", t.String(),
-				"value", t.GetValue(),
+				"value", newValue,
 			),
 			slog.Group("timing",
 				"timestamp", updateTimerTimestamp,
@@ -166,7 +167,7 @@ func StartTicker(t Ticker, updatePeriod time.Duration) {
 			slog.Warn("timer update is lagging behind update period",
 				slog.Group("ticker",
 					"name", t.String(),
-					"value", t.GetValue(),
+					"value", newValue,
 				),
 				slog.Group("timing",
 					"timestamp", updateTimerTimestamp,
