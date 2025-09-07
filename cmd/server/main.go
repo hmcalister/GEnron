@@ -42,11 +42,16 @@ func main() {
 	// --------------------------------------------------------------------------------
 	mux := http.NewServeMux()
 
-	getTickerValueServer := &servers.GetTickerValueServer{
-		Tickers: tickers,
+	tickerNames := make([]string, 0, len(tickers))
+	for k := range tickers {
+		tickerNames = append(tickerNames, k)
 	}
-	getTickerValuePath, getTickerValueHandler := tickerv1connect.NewTickerValueServiceHandler(getTickerValueServer)
-	mux.Handle(getTickerValuePath, getTickerValueHandler)
+	tickerInfoServer := &servers.TickerInfoServer{
+		Tickers:     tickers,
+		TickerNames: tickerNames,
+	}
+	tickerInfoServerPath, tickerInfoServerHandler := tickerv1connect.NewTickerInfoServiceHandler(tickerInfoServer)
+	mux.Handle(tickerInfoServerPath, tickerInfoServerHandler)
 
 	if err := http.ListenAndServe(
 		"localhost:8080",
