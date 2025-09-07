@@ -5,12 +5,12 @@ tickers:
   ticker01:
     type: "UniformRandom"
     value: 100.0
-    updateperiod: 1_000
+    updateperiod: 1_000_000
     randomrange: 1.0
   ticker02:
     type: "GeometricBrownianMotion"
-    value: 100.0
+    value: 1000.0
     updateperiod: 1_000_000
-    drift: 0.0
-    volatility: 1.0
+    drift: 0.000_000_5
+    volatility: 0.0001
   
