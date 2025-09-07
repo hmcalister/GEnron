@@ -15,18 +15,26 @@ var (
 // The default ticker interface.
 // All tickers must implement the below methods, but may use vastly different implementations.
 // This allows for, say, different simulation methods.
+//
+// To create a new Ticker implementation, make a new file (aptly named), define a struct,
+// include a BaseTicker as an embedded component, then define the Initialize and Update methods.
+// Then, in the NewTickerFromConfig method below, add the relevant case to the switch statement.
+// Don't forget to update documentation in the README.
 type Ticker interface {
 	// Return the name of the ticker.
+	// This method is implemented by the BaseTicker struct.
 	String() string
-
-	// Validate the ticker. Ensures the ticker is a meaningful representation in its current state.
-	// Returns nil if the ticker is valid, and an ErrorInvalidTicker otherwise.
-	Validate() error
 
 	// Get the current value of a ticker.
 	//
 	// Note that no ticker value may be below zero, as a rule of business logic.
+	// This method is implemented by the BaseTicker struct.
 	GetValue() float64
+
+	// Initialize the ticker using the passed viper config map.
+	// Ensures that all tickers have their initialization code in one file,
+	// with the rest of their implementation.
+	Initialize(*viper.Viper) error
 
 	// Update the value of a ticker.
 	//
