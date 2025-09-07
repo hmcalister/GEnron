@@ -23,12 +23,12 @@ Ticker Types:
 
 Update the ticker value with a uniformly chosen random number at every step. This is a very simple, but very unrealistic model.
 
-| Key | Datatype | Default | Meaning |
+| Key | Datatype | Meaning |
 | --- | -------- | ------- | ------- |
-| Type | String | "UniformRandom" | The ticker type. Must be explicitly specific and exactly the default string to be processed as this type. |
-| Value | float64 | 0.0 | The initial value for the ticker. Must be non-negative. |
-| RandomRange | float64 | 0.0 | The upper and lower bound on the random number. Must be non-negative. |
+| Type | String | The ticker type. Must be explicitly the above type to be processed at this ticker variety. |
+| Value | float64 | The initial value for the ticker. Must be non-negative. |
 | RandomSeed | int64 | None | The random seed to use for the generator. If left unset, the current unix timestamp is used instead. |
+| RandomRange | float64 | The upper and lower bound on the random number. Must be non-negative. |
 
 
 ## Plans
