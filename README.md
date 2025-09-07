@@ -27,6 +27,7 @@ See `config/LoadConfig` for more information. See `config.yaml` for an example c
 
 Ticker Types:
 - "UniformRandom"
+- "GeometricBrownianMotion"
 
 ### Uniform Random Ticker
 
@@ -40,6 +41,20 @@ Update the ticker value with a uniformly chosen random number at every step. Thi
 | value | float64 | The initial value for the ticker. Must be non-negative. |
 | randomseed | int64 | The random seed to use for the generator. If left unset, the current unix timestamp is used instead. |
 | randomrange | float64 | The upper and lower bound on the random number. Must be non-negative. |
+
+### Geometric Brownian Motion Ticker
+
+`type: "GeometricBrownianMotion"`
+
+Update the ticker value by geometric Brownian motion. More realistic, including both a drift and volatility term. Note that we assume $dt=1$, so scale both drift ($\mu$) and volatility ($\sigma$) accordingly. The update takes the form: $X_{t+dt} = X_t \exp((\mu - 0.5 \sigma^2)dt + \sigma Z \sqrt{dt})$, for $Z\sim N(0,1)$.
+
+| Key | Datatype | Meaning |
+| --- | -------- | ------- | 
+| type | String | The ticker type. Must be explicitly the above type to be processed at this ticker variety. |
+| value | float64 | The initial value for the ticker. Must be non-negative. |
+| randomseed | int64 | The random seed to use for the generator. If left unset, the current unix timestamp is used instead. |
+| drift | float64 | The general trend of the stock price over time. Positive values are generally increasing, negative values are generally decreasing. Zero drift implies a martingale. |
+| volatility | float64 | The "randomness" of the stock price. Must be non-negative. |
 
 
 ## Plans
