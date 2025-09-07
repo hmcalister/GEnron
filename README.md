@@ -3,6 +3,16 @@
 
 An implementation of real-time stock data served over [Connect-RPC](https://connectrpc.com/). 
 
+## Getting Started
+
+To start the server (which creates and updates tickers), first create a `config.yaml` file and set it according to the [section below](#config-specification), or use the example config file given. Alternative config files may be loaded using the command line flag `-configFilePath=...`. 
+
+Compile the server using `go build cmd/server/main.go -o server`, then run it using `./server`. Depending on the configuration, the program will either start printing logs to `stdout`, or create a log file, but as long as the process does not immediately terminate the server should be running.
+
+Make requests to the server on `localhost:8080` (the port of which may be changed using the config file, see the `port` option). A Go client is given, but other clients may be created using the prototbuf definitions given under the `api` directory.
+
+To generate new ConnectRPC bindings for your client of choice, alter the `buf.gen.yaml` file to target your client of choice. See [buf](https://buf.build/) and [ConnectRPC](https://connectrpc.com/) for details on what clients are available.
+
 ## Config Specification
 
 See `config/LoadConfig` for more information. See `config.yaml` for an example configuration.
