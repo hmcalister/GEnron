@@ -34,6 +34,11 @@ func (t *BaseTicker) initializeBase(tickerConfig *viper.Viper) error {
 		return errors.New("error initializing ticker, specified initial value is negative")
 	}
 
+	t.updatePeriod = time.Duration(tickerConfig.GetInt64("updateperiod")) * time.Nanosecond
+	if t.updatePeriod <= 0.0 {
+		return errors.New("error initializing ticker, specified update period is negative")
+	}
+
 	var randomSeed int64
 	if tickerConfig.IsSet("randomseed") {
 		randomSeed = tickerConfig.GetInt64("randomseed")
