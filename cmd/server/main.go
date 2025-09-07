@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/hmcalister/genron/config"
-	"github.com/hmcalister/genron/ticker"
+	"github.com/hmcalister/genron/cmd/server/config"
+	"github.com/hmcalister/genron/cmd/server/ticker"
 	"github.com/spf13/viper"
 )
 
