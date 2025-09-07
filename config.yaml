@@ -6,3 +6,4 @@ Tickers:
     Type: "UniformRandom"
     Value: 1.0
     RandomRange: 1.0
+  
