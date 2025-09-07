@@ -61,10 +61,10 @@ func (t *BaseTicker) GetValue() float64 {
 	return t.value
 }
 
-func (t *BaseTicker) GetInfo() (string, float64, time.Time) {
+func (t *BaseTicker) GetInfo() (string, float64, time.Time, time.Duration) {
 	t.mu.RLock()
 	defer t.mu.RUnlock()
-	return t.name, t.value, t.lastUpdateTimestamp
+	return t.name, t.value, t.lastUpdateTimestamp, t.updatePeriod
 }
 
 func (t *BaseTicker) SetLastUpdatedTimestamp(timestamp time.Time) {

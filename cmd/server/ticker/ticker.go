@@ -27,14 +27,14 @@ type Ticker interface {
 	// Does not require a lock since name should never change.
 	String() string
 
-	// Get the name, current value, and last-updated timestamp of a ticker.
+	// Get the name, current value, last-updated timestamp, and update period of a ticker.
 	// Requires a read lock of the ticker mutex.
 	// Implemented by the BaseTicker struct.
 	//
 	// By using a single method to get all information, this avoids
 	// locking the RWMutex multiple separate times when querying a ticker.
 	// Note that no ticker value may be below zero, as a rule of business logic.
-	GetInfo() (string, float64, time.Time)
+	GetInfo() (string, float64, time.Time, time.Duration)
 
 	// Set the last update timestamp of the ticker.
 	// Called in the StartTicker method.
