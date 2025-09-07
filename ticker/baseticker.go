@@ -13,12 +13,14 @@ type BaseTicker struct {
 	name    string
 	value   float64
 	randGen *rand.Rand
-	mu      sync.Mutex
+	mu                  sync.RWMutex
 }
 
 // Initialize only the base ticker attributes using the given viper config.
 // This initialization is shared between all tickers, so it is extracted here.
 // Note an error is returned if initialization is malformed, be sure to check and return!
+//
+// Does not lock the mutex, since this method will be called from the parent Initalize method, which already locks.
 func (t *BaseTicker) initializeBase(tickerConfig *viper.Viper) error {
 	if !tickerConfig.IsSet("Name") {
 		return errors.New("error initializing ticker, name field not specified")
@@ -48,6 +50,10 @@ func (t *BaseTicker) String() string {
 func (t *BaseTicker) GetValue() float64 {
 	t.mu.Lock()
 	defer t.mu.Unlock()
+	t.mu.RLock()
+	defer t.mu.RUnlock()
 
 	return t.value
 }
+	t.mu.RLock()
+	defer t.mu.RUnlock()

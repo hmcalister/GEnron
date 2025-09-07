@@ -12,6 +12,9 @@ type UniformRandomTicker struct {
 }
 
 func (t *UniformRandomTicker) Initialize(tickerConfig *viper.Viper) error {
+	t.mu.Lock()
+	defer t.mu.Unlock()
+
 	if err := t.initializeBase(tickerConfig); err != nil {
 		return err
 	}

@@ -22,21 +22,27 @@ var (
 // Don't forget to update documentation in the README.
 type Ticker interface {
 	// Return the name of the ticker.
-	// This method is implemented by the BaseTicker struct.
+	// Implemented by the BaseTicker struct.
+	//
+	// Does not require a lock since name should never change.
 	String() string
 
 	// Get the current value of a ticker.
+	// Requires a read lock of the ticker mutex.
+	// Implemented by the BaseTicker struct.
 	//
 	// Note that no ticker value may be below zero, as a rule of business logic.
-	// This method is implemented by the BaseTicker struct.
 	GetValue() float64
 
 	// Initialize the ticker using the passed viper config map.
+	// Requires a write lock of the ticker mutex.
+	//
 	// Ensures that all tickers have their initialization code in one file,
 	// with the rest of their implementation.
 	Initialize(*viper.Viper) error
 
 	// Update the value of a ticker.
+	// Requires a write lock of the ticker mutex.
 	//
 	// All updates should finish by ensuring the ticker value is non-negative,
 	// that is, clamp the updated value to be zero or larger.
