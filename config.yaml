@@ -5,6 +5,11 @@ port: 8080
 tickers:
   ticker01:
     type: "UniformRandom"
-    value: 1.0
+    value: 100.0
     randomrange: 1.0
+  ticker02:
+    type: "GeometricBrownianMotion"
+    value: 100.0
+    drift: 0.0
+    volatility: 1.0
   
