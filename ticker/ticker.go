@@ -108,6 +108,20 @@ func ParseTickers() map[string]Ticker {
 
 // Start the given ticker updating at the given update period. This function blocks, so call inside a goroutine.
 // If the ticker Update method takes too long, a warning is logged with level Warn.
+//
+// Example:
+// ```
+// updatePeriod := time.Duration(viper.GetInt64("UpdatePeriod")) * time.Nanosecond
+//
+//	var tickerWaitGroup sync.WaitGroup
+//	for _, t := range tickers {
+//		tickerWaitGroup.Go(func() {
+//			ticker.StartTicker(t, updatePeriod)
+//		})
+//	}
+//	tickerWaitGroup.Wait()
+//
+// ```
 func StartTicker(t Ticker, updatePeriod time.Duration) {
 	// An unfortunate name, time.Ticker is a timing device to count a certain time before updating.
 	// We will refer to this as the timer throughout to avoid confusion with a stock ticker.
