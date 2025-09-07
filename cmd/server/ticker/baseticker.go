@@ -23,19 +23,19 @@ type BaseTicker struct {
 //
 // Does not lock the mutex, since this method will be called from the parent Initalize method, which already locks.
 func (t *BaseTicker) initializeBase(tickerConfig *viper.Viper) error {
-	if !tickerConfig.IsSet("Name") {
+	if !tickerConfig.IsSet("name") {
 		return errors.New("error initializing ticker, name field not specified")
 	}
-	t.name = tickerConfig.GetString("Name")
+	t.name = tickerConfig.GetString("name")
 
-	t.value = tickerConfig.GetFloat64("Value")
+	t.value = tickerConfig.GetFloat64("value")
 	if t.value < 0.0 {
 		return errors.New("error initializing ticker, specified initial value is negative")
 	}
 
 	var randomSeed int64
-	if tickerConfig.IsSet("RandomSeed") {
-		randomSeed = tickerConfig.GetInt64("RandomSeed")
+	if tickerConfig.IsSet("randomseed") {
+		randomSeed = tickerConfig.GetInt64("randomseed")
 	} else {
 		randomSeed = time.Now().UnixNano()
 	}

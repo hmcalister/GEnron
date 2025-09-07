@@ -19,7 +19,7 @@ func (t *UniformRandomTicker) Initialize(tickerConfig *viper.Viper) error {
 		return err
 	}
 
-	t.randomRange = tickerConfig.GetFloat64("RandomRange")
+	t.randomRange = tickerConfig.GetFloat64("randomrange")
 	if t.randomRange < 0.0 {
 		return errors.New("error initializing uniform random ticker, random range is negative")
 	}
