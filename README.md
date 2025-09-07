@@ -58,3 +58,5 @@ Update the ticker value with a uniformly chosen random number at every step. Thi
 
 - [Slog](https://pkg.go.dev/log/slog): For structured logging.
 - [Viper](https://github.com/spf13/viper): For configuration setting.
+- [buf](https://buf.build/): For generating consistent api packages.
+- [ConnectRPC](https://connectrpc.com/): For easy server and client implementations using prototbuf.
