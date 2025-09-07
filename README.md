@@ -21,9 +21,8 @@ See `config/LoadConfig` for more information. See `config.yaml` for an example c
 | --- | -------- | ------- | ------- |
 | loglevel | String Enum ("none", "error", "warn", "info", "debug") | "info" | The level at which logs are recorded. None disables logging. |
 | logfile | String | "" | The filepath to write logs to. If left unset or empty, logs are sent to `stdout`. The file is truncated before logging begins. If the file cannot be opened for writing, the program panics. |
-| updateperiod | int64 | 1_000_000 | The amount of time (in nanoseconds) to between updates of the tickers. Must be greater than 0. If the update period is too small, the program may not be able to achieve the required period. |
 | port | int | 8080 | The port to bind the HTTP server to. If the given port is unbindable (e.g. by a lack of permission or availability) the program panics. |
-| tickers | Dictionary[String, Ticker] | Empty | The tickers to create and manage. Ticker names are used to request data from the server, and tickers have unique specifications based on the ticker type. See below for a list of ticker types and their specifications.<br />The key string is the ticker `name`, which must be unique for each ticker. All tickers have the fields `type`, `value`, and `randomseed`. <br />The `type` field that identifies the ticker type. <br />The `value` field specifies the initial value, and must be non-negative. <br />The valid ticker types are listed below. In general, all ticker fields are required. The except is `randomseed` which may be left unset to specify a random seed based on the current timestamp. |
+| tickers | Dictionary[String, Ticker] | Empty | The tickers to create and manage. Ticker names are used to request data from the server, and tickers have unique specifications based on the ticker type. See below for a list of ticker types and their specifications.<br />The key string is the ticker `name`, which must be unique for each ticker. All tickers have the fields `type`, `value`, `updateperiod`, and `randomseed`. <br />The `type` field that identifies the ticker type. <br />The `value` field specifies the initial value, and must be non-negative. <br />The `updateperiod` field specifies how quickly (in nanoseconds) the ticker is to be updated, and must be non-negative. <br />The valid ticker types are listed below. In general, all ticker fields are required. The exception is `randomseed` which may be left unset to specify a random seed based on the current timestamp. |
 
 Ticker Types:
 - "UniformRandom"
@@ -39,6 +38,7 @@ Update the ticker value with a uniformly chosen random number at every step. Thi
 | --- | -------- | ------- | 
 | type | String | The ticker type. Must be explicitly the above type to be processed at this ticker variety. |
 | value | float64 | The initial value for the ticker. Must be non-negative. |
+| updateperiod | int64 | The amount of time (in nanoseconds) to between updates of the ticker. Must be greater than 0. If the update period is too small, the program may not be able to achieve the required period. |
 | randomseed | int64 | The random seed to use for the generator. If left unset, the current unix timestamp is used instead. |
 | randomrange | float64 | The upper and lower bound on the random number. Must be non-negative. |
 
@@ -52,6 +52,7 @@ Update the ticker value by geometric Brownian motion. More realistic, including 
 | --- | -------- | ------- | 
 | type | String | The ticker type. Must be explicitly the above type to be processed at this ticker variety. |
 | value | float64 | The initial value for the ticker. Must be non-negative. |
+| updateperiod | int64 | The amount of time (in nanoseconds) to between updates of the ticker. Must be greater than 0. If the update period is too small, the program may not be able to achieve the required period. |
 | randomseed | int64 | The random seed to use for the generator. If left unset, the current unix timestamp is used instead. |
 | drift | float64 | The general trend of the stock price over time. Positive values are generally increasing, negative values are generally decreasing. Zero drift implies a martingale. |
 | volatility | float64 | The "randomness" of the stock price. Must be non-negative. |

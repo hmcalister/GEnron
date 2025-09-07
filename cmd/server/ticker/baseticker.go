@@ -12,6 +12,7 @@ import (
 type BaseTicker struct {
 	name                string
 	value               float64
+	updatePeriod        time.Duration
 	lastUpdateTimestamp time.Time
 	randGen             *rand.Rand
 	mu                  sync.RWMutex
@@ -31,6 +32,11 @@ func (t *BaseTicker) initializeBase(tickerConfig *viper.Viper) error {
 	t.value = tickerConfig.GetFloat64("value")
 	if t.value < 0.0 {
 		return errors.New("error initializing ticker, specified initial value is negative")
+	}
+
+	t.updatePeriod = time.Duration(tickerConfig.GetInt64("updateperiod")) * time.Nanosecond
+	if t.updatePeriod <= 0.0 {
+		return errors.New("error initializing ticker, specified update period is negative")
 	}
 
 	var randomSeed int64
@@ -55,10 +61,10 @@ func (t *BaseTicker) GetValue() float64 {
 	return t.value
 }
 
-func (t *BaseTicker) GetInfo() (string, float64, time.Time) {
+func (t *BaseTicker) GetInfo() (string, float64, time.Time, time.Duration) {
 	t.mu.RLock()
 	defer t.mu.RUnlock()
-	return t.name, t.value, t.lastUpdateTimestamp
+	return t.name, t.value, t.lastUpdateTimestamp, t.updatePeriod
 }
 
 func (t *BaseTicker) SetLastUpdatedTimestamp(timestamp time.Time) {

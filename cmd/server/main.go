@@ -4,13 +4,11 @@ import (
 	"flag"
 	"log/slog"
 	"net/http"
-	"time"
 
 	"github.com/hmcalister/genron/cmd/server/config"
 	"github.com/hmcalister/genron/cmd/server/servers"
 	"github.com/hmcalister/genron/cmd/server/ticker"
 	"github.com/hmcalister/genron/gen/api/ticker/v1/tickerv1connect"
-	"github.com/spf13/viper"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 )
@@ -29,13 +27,10 @@ func main() {
 	tickers := ticker.ParseTickers()
 	slog.Debug("parsed tickers", "tickers", tickers)
 
-	// --------------------------------------------------------------------------------
-
-	updatePeriod := time.Duration(viper.GetInt64("updateperiod")) * time.Nanosecond
 	for n, t := range tickers {
 		go func() {
 			slog.Debug("starting ticker", "tickerName", n)
-			ticker.StartTicker(t, updatePeriod)
+			ticker.StartTicker(t)
 		}()
 	}
 
