@@ -3,16 +3,13 @@ package ticker
 import (
 	"errors"
 	"log/slog"
-	"math/rand"
 	"time"
 
 	"github.com/spf13/viper"
 )
 
 var (
-	ErrorUnknownTickerType    = errors.New("ticker type is not known")
-	ErrorGenericInvalidTicker = errors.New("ticker is invalid for an unspecified reason")
-	ErrorNegativeValueTicker  = errors.New("ticker has a negative value")
+	ErrorUnknownTickerType = errors.New("ticker type is not known")
 )
 
 // The default ticker interface.
