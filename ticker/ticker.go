@@ -37,6 +37,7 @@ type Ticker interface {
 	// Requires a read lock of the ticker mutex.
 	// Implemented by the BaseTicker struct.
 	SetLastUpdatedTimestamp(time.Time)
+
 	// Get the current value of a ticker.
 	// Requires a read lock of the ticker mutex.
 	// Implemented by the BaseTicker struct.
@@ -144,6 +145,7 @@ func StartTicker(t Ticker, updatePeriod time.Duration) {
 	timer := time.NewTicker(updatePeriod)
 
 	for updateTimerTimestamp := range timer.C {
+		t.SetLastUpdatedTimestamp(updateTimerTimestamp)
 		updateStartTime := time.Now()
 		t.Update()
 		updateDuration := time.Since(updateStartTime)
