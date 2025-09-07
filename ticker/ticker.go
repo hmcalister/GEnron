@@ -66,18 +66,21 @@ func NewTickerFromConfig(name string, tickerConfig *viper.Viper) (Ticker, error)
 	return t, nil
 }
 
-func ParseTickers() []Ticker {
-	allTickers := make([]Ticker, 0)
+// Parse tickers from the viper config, looking into the `Tickers` array to find definitions.
+//
+// Returns a map from tickerName to the initialized ticker. Note that tickers have not yet been started!
+// After parsing tickers, `StartTicker` must be called on each ticker (in a goroutine)
+func ParseTickers() map[string]Ticker {
+	allTickers := make(map[string]Ticker, 0)
 
 	// viper.GetStringMap("Tickers") gives a map of all tickers specified under
 	// the `tickers` key in the config file. Loop over these and call viper.Sub
 	// to get the config of each ticker.
 	for tickerName := range viper.GetStringMap("Tickers") {
 		tickerConfig := viper.Sub("Tickers." + tickerName)
+		tickerConfig.Set("name", tickerName) // Add the ticker name to the config as a way to easily pass this along to initializations
 
-		// Initialize each ticker based on the Type. If the Type is unknown
-		// (default case) then panic.
-		t, err := NewTicker(tickerName, tickerConfig)
+		t, err := NewTickerFromConfig(tickerName, tickerConfig)
 		if err != nil {
 			slog.Error("error when parsing ticker",
 				"err", err,
@@ -89,6 +92,8 @@ func ParseTickers() []Ticker {
 			)
 			continue
 		}
+
+		allTickers[tickerName] = t
 		slog.Debug("parsed new ticker",
 			slog.Group(
 				"ticker",
@@ -96,7 +101,6 @@ func ParseTickers() []Ticker {
 				"config", tickerConfig.AllSettings(),
 			),
 		)
-		allTickers = append(allTickers, t)
 	}
 
 	return allTickers
