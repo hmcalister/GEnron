@@ -70,6 +70,8 @@ func NewTickerFromConfig(name string, tickerConfig *viper.Viper) (Ticker, error)
 	switch tickerType {
 	case "UniformRandom":
 		t = &UniformRandomTicker{}
+	case "GeometricBrownianMotion":
+		t = &GeometricBrownianMotionTicker{}
 	default:
 		return nil, ErrorUnknownTickerType
 	}
