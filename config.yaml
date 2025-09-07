@@ -1,6 +1,7 @@
 # logfile: "logging.log"
-loglevel: debug
+loglevel: info
 updateperiod: 1_000_000_000
+port: 8080
 tickers:
   ticker01:
     type: "UniformRandom"
