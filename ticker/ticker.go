@@ -27,6 +27,16 @@ type Ticker interface {
 	// Does not require a lock since name should never change.
 	String() string
 
+	// Get the last update timestamp of the ticker.
+	// Requires a read lock of the ticker mutex.
+	// Implemented by the BaseTicker struct.
+	GetLastUpdatedTimestamp() time.Time
+
+	// Set the last update timestamp of the ticker.
+	// Called in the StartTicker method.
+	// Requires a read lock of the ticker mutex.
+	// Implemented by the BaseTicker struct.
+	SetLastUpdatedTimestamp(time.Time)
 	// Get the current value of a ticker.
 	// Requires a read lock of the ticker mutex.
 	// Implemented by the BaseTicker struct.
