@@ -3,12 +3,16 @@ package main
 import (
 	"flag"
 	"log/slog"
-	"sync"
+	"net/http"
 	"time"
 
 	"github.com/hmcalister/genron/cmd/server/config"
+	"github.com/hmcalister/genron/cmd/server/servers"
 	"github.com/hmcalister/genron/cmd/server/ticker"
+	"github.com/hmcalister/genron/gen/api/ticker/v1/tickerv1connect"
 	"github.com/spf13/viper"
+	"golang.org/x/net/http2"
+	"golang.org/x/net/http2/h2c"
 )
 
 func main() {
@@ -28,11 +32,27 @@ func main() {
 	// --------------------------------------------------------------------------------
 
 	updatePeriod := time.Duration(viper.GetInt64("updateperiod")) * time.Nanosecond
-	var tickerWaitGroup sync.WaitGroup
-	for _, t := range tickers {
-		tickerWaitGroup.Go(func() {
+	for n, t := range tickers {
+		go func() {
+			slog.Debug("starting ticker", "tickerName", n)
 			ticker.StartTicker(t, updatePeriod)
-		})
+		}()
 	}
-	tickerWaitGroup.Wait()
+
+	// --------------------------------------------------------------------------------
+	mux := http.NewServeMux()
+
+	getTickerValueServer := &servers.GetTickerValueServer{
+		Tickers: tickers,
+	}
+	getTickerValuePath, getTickerValueHandler := tickerv1connect.NewTickerValueServiceHandler(getTickerValueServer)
+	mux.Handle(getTickerValuePath, getTickerValueHandler)
+
+	if err := http.ListenAndServe(
+		"localhost:8080",
+		h2c.NewHandler(mux, &http2.Server{}),
+	); err != nil {
+		slog.Error("error during listen and serve of http mux", "err", err)
+		panic(err)
+	}
 }
