@@ -1,50 +1,35 @@
 package ticker
 
 import (
-	"math/rand"
-	"sync"
+	"errors"
+
+	"github.com/spf13/viper"
 )
 
 type UniformRandomTicker struct {
-	name        string
-	Value       float64 `mapstructure:"Value"`
-	RandomRange float64 `mapstructure:"RandomRange"`
-	randGen     *rand.Rand
-	mu          sync.Mutex
+	BaseTicker
+	randomRange float64
 }
 
-func (t *UniformRandomTicker) String() string {
-	return t.name
-}
-
-func (t *UniformRandomTicker) Validate() error {
-	t.mu.Lock()
-	defer t.mu.Unlock()
-
-	if t.Value < 0.0 {
-		return ErrorNegativeValueTicker
+func (t *UniformRandomTicker) Initialize(tickerConfig *viper.Viper) error {
+	if err := t.initializeBase(tickerConfig); err != nil {
+		return err
 	}
 
-	if t.RandomRange < 0.0 {
-		return ErrorGenericInvalidTicker
+	t.randomRange = tickerConfig.GetFloat64("RandomRange")
+	if t.randomRange < 0.0 {
+		return errors.New("error initializing uniform random ticker, random range is negative")
 	}
 
 	return nil
-}
-
-func (t *UniformRandomTicker) GetValue() float64 {
-	t.mu.Lock()
-	defer t.mu.Unlock()
-
-	return t.Value
 }
 
 func (t *UniformRandomTicker) Update() {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 
-	t.Value += -t.RandomRange + 2*t.RandomRange*t.randGen.Float64()
-	if t.Value < 0 {
-		t.Value = 0
+	t.value += -t.randomRange + 2*t.randomRange*t.randGen.Float64()
+	if t.value < 0 {
+		t.value = 0
 	}
 }
