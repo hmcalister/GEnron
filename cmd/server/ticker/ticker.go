@@ -138,7 +138,8 @@ func ParseTickers() map[string]Ticker {
 //	tickerWaitGroup.Wait()
 //
 // ```
-func StartTicker(t Ticker, updatePeriod time.Duration) {
+func StartTicker(t Ticker) {
+	tickerName, _, _, updatePeriod := t.GetInfo()
 	// An unfortunate name, time.Ticker is a timing device to count a certain time before updating.
 	// We will refer to this as the timer throughout to avoid confusion with a stock ticker.
 	timer := time.NewTicker(updatePeriod)
@@ -148,11 +149,11 @@ func StartTicker(t Ticker, updatePeriod time.Duration) {
 		updateStartTime := time.Now()
 		t.Update()
 		updateDuration := time.Since(updateStartTime)
-		_, newValue, lastUpdatedTimestamp := t.GetInfo()
+		_, newValue, lastUpdatedTimestamp, _ := t.GetInfo()
 
 		slog.Debug("ticker updated",
 			slog.Group("ticker",
-				"name", t.String(),
+				"name", tickerName,
 				"value", newValue,
 			),
 			slog.Group("timing",
@@ -165,7 +166,7 @@ func StartTicker(t Ticker, updatePeriod time.Duration) {
 		if updateDuration > updatePeriod {
 			slog.Warn("timer update is lagging behind update period",
 				slog.Group("ticker",
-					"name", t.String(),
+					"name", tickerName,
 					"value", newValue,
 				),
 				slog.Group("timing",
