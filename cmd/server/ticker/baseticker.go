@@ -12,8 +12,8 @@ import (
 type BaseTicker struct {
 	name                string
 	value               float64
-	randGen             *rand.Rand
 	lastUpdateTimestamp time.Time
+	randGen             *rand.Rand
 	mu                  sync.RWMutex
 }
 
@@ -55,10 +55,10 @@ func (t *BaseTicker) GetValue() float64 {
 	return t.value
 }
 
-func (t *BaseTicker) GetLastUpdatedTimestamp() time.Time {
+func (t *BaseTicker) GetInfo() (string, float64, time.Time) {
 	t.mu.RLock()
 	defer t.mu.RUnlock()
-	return t.lastUpdateTimestamp
+	return t.name, t.value, t.lastUpdateTimestamp
 }
 
 func (t *BaseTicker) SetLastUpdatedTimestamp(timestamp time.Time) {

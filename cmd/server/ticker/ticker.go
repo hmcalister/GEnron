@@ -27,23 +27,20 @@ type Ticker interface {
 	// Does not require a lock since name should never change.
 	String() string
 
-	// Get the last update timestamp of the ticker.
+	// Get the name, current value, and last-updated timestamp of a ticker.
 	// Requires a read lock of the ticker mutex.
 	// Implemented by the BaseTicker struct.
-	GetLastUpdatedTimestamp() time.Time
+	//
+	// By using a single method to get all information, this avoids
+	// locking the RWMutex multiple separate times when querying a ticker.
+	// Note that no ticker value may be below zero, as a rule of business logic.
+	GetInfo() (string, float64, time.Time)
 
 	// Set the last update timestamp of the ticker.
 	// Called in the StartTicker method.
 	// Requires a read lock of the ticker mutex.
 	// Implemented by the BaseTicker struct.
 	SetLastUpdatedTimestamp(time.Time)
-
-	// Get the current value of a ticker.
-	// Requires a read lock of the ticker mutex.
-	// Implemented by the BaseTicker struct.
-	//
-	// Note that no ticker value may be below zero, as a rule of business logic.
-	GetValue() float64
 
 	// Initialize the ticker using the passed viper config map.
 	// Requires a write lock of the ticker mutex.
@@ -149,7 +146,7 @@ func StartTicker(t Ticker, updatePeriod time.Duration) {
 		updateStartTime := time.Now()
 		t.Update()
 		updateDuration := time.Since(updateStartTime)
-		newValue := t.GetValue()
+		_, newValue, lastUpdatedTimestamp := t.GetInfo()
 
 		slog.Debug("ticker updated",
 			slog.Group("ticker",
@@ -157,7 +154,7 @@ func StartTicker(t Ticker, updatePeriod time.Duration) {
 				"value", newValue,
 			),
 			slog.Group("timing",
-				"timestamp", updateTimerTimestamp,
+				"timestamp", lastUpdatedTimestamp,
 				"updateDuration", updateDuration,
 				"expectedUpdatePeriod", updatePeriod,
 			),
@@ -170,7 +167,7 @@ func StartTicker(t Ticker, updatePeriod time.Duration) {
 					"value", newValue,
 				),
 				slog.Group("timing",
-					"timestamp", updateTimerTimestamp,
+					"timestamp", lastUpdatedTimestamp,
 					"updateDuration", updateDuration,
 					"expectedUpdatePeriod", updatePeriod,
 				),
