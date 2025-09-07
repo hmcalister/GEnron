@@ -35,10 +35,10 @@ Ticker Types:
 Update the ticker value with a uniformly chosen random number at every step. This is a very simple, but very unrealistic model.
 
 | Key | Datatype | Meaning |
-| --- | -------- | ------- | ------- |
+| --- | -------- | ------- | 
 | type | String | The ticker type. Must be explicitly the above type to be processed at this ticker variety. |
 | value | float64 | The initial value for the ticker. Must be non-negative. |
-| randomseed | int64 | None | The random seed to use for the generator. If left unset, the current unix timestamp is used instead. |
+| randomseed | int64 | The random seed to use for the generator. If left unset, the current unix timestamp is used instead. |
 | randomrange | float64 | The upper and lower bound on the random number. Must be non-negative. |
 
 
