@@ -45,34 +45,25 @@ type Ticker interface {
 
 // Factory pattern to initialize the new ticker.
 // Returns:
-// - (Ticker, nil) if all checks pass and the ticker is initialized
-// - (nil, ErrorUnknownTickerType) if the ticker type in tickerConfig is unknown
-// - (nil, ErrorInvalidTicker) if the ticker is initialized with invalid parameters (e.g. a negative initial value)
-func NewTicker(name string, tickerConfig *viper.Viper) (Ticker, error) {
+//   - (Ticker, nil) if all checks pass and the ticker is initialized
+//   - (nil, ErrorUnknownTickerType) if the ticker type in tickerConfig is unknown
+//   - (nil, error) if the ticker is initialized with invalid parameters (e.g. a negative initial value)
+//     The specifics of the error are determined by the initialization method of the selected ticker
+func NewTickerFromConfig(name string, tickerConfig *viper.Viper) (Ticker, error) {
 	tickerType := tickerConfig.GetString("Type")
 
+	var t Ticker
 	switch tickerType {
 	case "UniformRandom":
-		var t *UniformRandomTicker
-		if err := tickerConfig.Unmarshal(&t); err != nil {
-			return nil, err
-		}
-		if err := t.Validate(); err != nil {
-			return nil, err
-		}
-
-		var randomSeed int64
-		if tickerConfig.IsSet("RandomSeed") {
-			randomSeed = tickerConfig.GetInt64("RandomSeed")
-		} else {
-			randomSeed = time.Now().UnixNano()
-		}
-		t.randGen = rand.New(rand.NewSource(randomSeed))
-		t.name = name
-		return t, nil
+		t = &UniformRandomTicker{}
 	default:
 		return nil, ErrorUnknownTickerType
 	}
+
+	if err := t.Initialize(tickerConfig); err != nil {
+		return nil, err
+	}
+	return t, nil
 }
 
 func ParseTickers() []Ticker {
