@@ -12,6 +12,7 @@ import (
 type BaseTicker struct {
 	name                string
 	value               float64
+	updatePeriod        time.Duration
 	lastUpdateTimestamp time.Time
 	randGen             *rand.Rand
 	mu                  sync.RWMutex
