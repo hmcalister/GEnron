@@ -13,7 +13,6 @@ func LoadConfig(configFilePath string) {
 
 	viper.SetDefault("loglevel", "info")
 	viper.SetDefault("logfile", "")
-	viper.SetDefault("updateperiod", 1_000_000)
 
 	// Read explicitly from the config file give.
 	// This may ignore other config paths (e.g. environment variables), worth testing.
@@ -29,13 +28,6 @@ func LoadConfig(configFilePath string) {
 			slog.Error("error during config read", "err", err)
 			panic(err)
 		}
-	}
-
-	// Now config is loaded, all keys should be available through viper.Get
-	// Validate any remaining keys
-	if viper.GetInt64("updateperiod") < 0 {
-		slog.Error("update period is negative", "updateperiod", viper.GetInt64("updateperiod"))
-		panic("update period is negative")
 	}
 }
 
