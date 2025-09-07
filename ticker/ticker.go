@@ -105,3 +105,43 @@ func ParseTickers() map[string]Ticker {
 
 	return allTickers
 }
+
+// Start the given ticker updating at the given update period. This function blocks, so call inside a goroutine.
+// If the ticker Update method takes too long, a warning is logged with level Warn.
+func StartTicker(t Ticker, updatePeriod time.Duration) {
+	// An unfortunate name, time.Ticker is a timing device to count a certain time before updating.
+	// We will refer to this as the timer throughout to avoid confusion with a stock ticker.
+	timer := time.NewTicker(updatePeriod)
+
+	for updateTimerTimestamp := range timer.C {
+		updateStartTime := time.Now()
+		t.Update()
+		updateDuration := time.Since(updateStartTime)
+
+		slog.Debug("ticker updated",
+			slog.Group("ticker",
+				"name", t.String(),
+				"value", t.GetValue(),
+			),
+			slog.Group("timing",
+				"timestamp", updateTimerTimestamp,
+				"updateDuration", updateDuration,
+				"expectedUpdatePeriod", updatePeriod,
+			),
+		)
+
+		if updateDuration > updatePeriod {
+			slog.Warn("timer update is lagging behind update period",
+				slog.Group("ticker",
+					"name", t.String(),
+					"value", t.GetValue(),
+				),
+				slog.Group("timing",
+					"timestamp", updateTimerTimestamp,
+					"updateDuration", updateDuration,
+					"expectedUpdatePeriod", updatePeriod,
+				),
+			)
+		}
+	}
+}
